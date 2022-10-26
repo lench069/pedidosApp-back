@@ -67,7 +67,7 @@ class Productos_Ctrl
         $items = array();
         foreach ($result as $producto) {
             $item = $producto->cast();
-            $item['imagen'] = !empty($item['imagen']) ? 'http://localhost/pedidosApp-back/' . $item['imagen'] : 'http://via.placeholder.com/300x300';
+            $item['imagen'] = !empty($item['imagen']) ? 'http://192.168.100.94/pedidosApp-back/' . $item['imagen'] : 'http://via.placeholder.com/300x300';
             $items[] = $item;
         }
         echo json_encode([
