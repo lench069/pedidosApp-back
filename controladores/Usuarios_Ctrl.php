@@ -19,7 +19,8 @@ class Usuarios_Ctrl
             $msg = "El nombre de usuario o correo que intenta usar se encuentran registrados.";
         } else {
             $this->M_Usuario->set('usuario', $f3->get('POST.usuario'));
-            $this->M_Usuario->set('clave', md5($f3->get('POST.clave')));
+            //$this->M_Usuario->set('clave', md5($f3->get('POST.clave')));   MD5
+            $this->M_Usuario->set('clave', ($f3->get('POST.clave')));
             $this->M_Usuario->set('nombre', $f3->get('POST.nombre'));
             $this->M_Usuario->set('telefono', $f3->get('POST.telefono'));
             $this->M_Usuario->set('correo', $f3->get('POST.correo'));
@@ -122,5 +123,37 @@ class Usuarios_Ctrl
             'mensaje' => $msg,
             'info' => $info
         ]);
+    }
+
+    public function login($f3)
+    {
+        $this->M_Usuario->load(['usuario = ?',$f3->get('POST.usuario')]);
+       
+        $msg='';
+        $item = array();
+        if($this->M_Usuario->loaded() > 0)
+        {
+            $this->M_Usuario->load(['clave = ? AND usuario = ?',$f3->get('POST.clave'), $f3->get('POST.usuario')]);
+            
+            if($this->M_Usuario->loaded() > 0)
+            {
+                $msg = 'true';
+                $item = $this->M_Usuario->cast();
+            }else{
+                $msg = 'clave incorrecta';
+            }
+   
+        }else
+        {
+            $msg = 'usuario no existe';
+
+        }
+        echo json_encode([
+            'mensaje' => $msg,
+            'info' =>[
+                'item'=>$item
+            ]
+        ]);
+        
     }
 }

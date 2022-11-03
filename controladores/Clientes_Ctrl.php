@@ -25,8 +25,6 @@ class Clientes_Ctrl
             $this->M_Cliente->set('telefono', $f3->get('POST.telefono'));
             $this->M_Cliente->set('correo', $f3->get('POST.correo'));
             $this->M_Cliente->set('direccion', $f3->get('POST.direccion'));
-            $this->M_Cliente->set('pais', $f3->get('POST.pais'));
-            $this->M_Cliente->set('ciudad', $f3->get('POST.ciudad'));
             $this->M_Cliente->save();
             echo json_encode([
                 'mensaje' => 'Cliente creado',

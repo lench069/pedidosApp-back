@@ -23,6 +23,8 @@ class Productos_Ctrl
             $this->M_Producto->set('stock', $f3->get('POST.stock'));
             $this->M_Producto->set('precio', $f3->get('POST.precio'));
             $this->M_Producto->set('activo', $f3->get('POST.activo'));
+            $this->M_Producto->set('descripcion', $f3->get('POST.descripcion'));
+            $this->M_Producto->set('categoria', $f3->get('POST.id_categoria'));
             $this->M_Producto->save(); 
             $id = $this->M_Producto->get('id');
             if($id > 0) {
@@ -115,6 +117,8 @@ class Productos_Ctrl
                 $this->M_Producto->set('precio', $f3->get('POST.precio'));
                 $this->M_Producto->set('activo', $f3->get('POST.activo'));
                 $this->M_Producto->set('imagen', $this->Guardar_Imagen($f3->get('POST.imagen')));
+                $this->M_Producto->set('descripcion', $f3->get('POST.descripcion'));
+                $this->M_Producto->set('categoria', $f3->get('POST.id_categoria'));
                 $this->M_Producto->save();
 
                 $msg = "Producto actualizado.";
