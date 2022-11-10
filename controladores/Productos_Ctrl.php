@@ -63,6 +63,29 @@ class Productos_Ctrl
         ]);
     }
 
+    public function consultar_categoria($f3)
+    {
+        $categoria_id = $f3->get('PARAMS.categoria_id');
+        $result =  $this->M_Producto->find(['categoria = ?', $categoria_id]);
+        $msg = "";
+        $item = array();
+        $items = array();
+       // echo $f3->get('DB')->log();
+        foreach ($result as $producto) {
+            $msg = "Productos cargados.";
+            $item = $producto->cast();
+            $item['imagen'] = !empty($item['imagen']) ? 'http://192.168.100.94/pedidosApp-back/' . $item['imagen'] : 'http://via.placeholder.com/300x300';
+            $items[] = $item;
+        } 
+        echo json_encode([
+            'mensaje' => count($items) > 0 ? '' : 'Aún no hay registros para mostrar.',
+            'info' => [
+                'items' => $items,
+                'total' => count($items)
+            ]
+        ]);
+    }
+
     public function listado($f3)
     {
         $result = $this->M_Producto->find(['nombre LIKE ?', '%' . $f3->get('POST.texto') . '%']);
