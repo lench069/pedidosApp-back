@@ -21,6 +21,9 @@ class Pedidos_Ctrl
         $this->M_Pedido->set('fecha', $fecha);
         $this->M_Pedido->set('usuario_id', $f3->get('POST.usuario_id'));
         $this->M_Pedido->set('estado', $f3->get('POST.estado'));
+        $this->M_Pedido->set('subtotal', $f3->get('POST.subtotal'));
+        $this->M_Pedido->set('iva', $f3->get('POST.iva'));
+        $this->M_Pedido->set('total', $f3->get('POST.total'));
         $this->M_Pedido->save();
         echo json_encode([
             'mensaje' => 'Pedido creado',
@@ -123,9 +126,9 @@ class Pedidos_Ctrl
         $this->M_Pedido->cliente = 'SELECT nombre FROM clientes WHERE id = pedidos.cliente_id';
         $this->M_Pedido->n_productos = 'SELECT COUNT(id) FROM pedidos_detalle WHERE pedido_id = pedidos.id';
         $this->M_Pedido->vendedor = 'SELECT nombre FROM usuarios WHERE id = pedidos.usuario_id';
-        $this->M_Pedido->total = 'SELECT SUM(cantidad * precio) FROM pedidos_detalle WHERE pedido_id = pedidos.id';
-
+        $this->M_Pedido->total = 'SELECT SUM(cantidad * precio) FROM pedidos_detalle WHERE pedido_id = pedidos.id';  
         $result = $this->M_Pedido->find($params);
+        //echo $f3->get('DB')->log();
         $items = array();
         foreach($result as $pedido) {
             $items[] = $pedido->cast();
@@ -156,4 +159,22 @@ class Pedidos_Ctrl
         ]);
     }
 
+    public function actualizar($f3)
+    {
+        $respuesta = array();
+        $f3->get('DB')->begin();
+        $resultado = $f3->get('DB')->exec("UPDATE `pedidos` SET `estado`="."'".$f3->get('POST.estado')."'".", `usuario_id`= "."'".$f3->get('POST.usuario_id')."'"." , `subtotal`= "."'".$f3->get('POST.subtotal')."'".", `iva`= "."'".$f3->get('POST.iva')."'".", `total`= "."'".$f3->get('POST.total')."'"." WHERE `id`=" .$f3->get('POST.id'));
+        $f3->get('DB')->commit();
+         
+            $result = 'Pedido Actuaizado';
+            $id = -1; 
+        echo json_encode([
+            'mensaje' => $result,
+            'info' => [
+                'id' => $id
+            ]
+        ]);
+        
+  }
+  
 }

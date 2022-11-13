@@ -25,6 +25,7 @@ class Clientes_Ctrl
             $this->M_Cliente->set('telefono', $f3->get('POST.telefono'));
             $this->M_Cliente->set('correo', $f3->get('POST.correo'));
             $this->M_Cliente->set('direccion', $f3->get('POST.direccion'));
+            $this->M_Cliente->set('uuid', $f3->get('POST.uuid'));
             $this->M_Cliente->save();
             echo json_encode([
                 'mensaje' => 'Cliente creado',
@@ -37,8 +38,30 @@ class Clientes_Ctrl
 
     public function consultar($f3)
     {
+        $uuid = $f3->get('PARAMS.uuid');
+        $this->M_Cliente->load(['uuid = ?', $uuid]);
+        //echo $f3->get('DB')->log();
+        $msg = "";
+        $item = array();
+        if ($this->M_Cliente->loaded() > 0) {
+            $msg = "Cliente encontrado.";
+            $item = $this->M_Cliente->cast();
+        } else {
+            $msg = "El Cliente no existe.";
+        }
+        echo json_encode([
+            'mensaje' => $msg,
+            'info' => [
+                'item' => $item
+            ]
+        ]);
+    }
+
+    public function consultar_id($f3)
+    {
         $cliente_id = $f3->get('PARAMS.cliente_id');
-        $this->M_Cliente->load(['id = ?', $cliente_id]);
+        $this->M_Cliente->load(['id= ?', $cliente_id]);
+        //echo $f3->get('DB')->log();
         $msg = "";
         $item = array();
         if ($this->M_Cliente->loaded() > 0) {
