@@ -128,7 +128,7 @@ class Pedidos_Ctrl
         $this->M_Pedido->vendedor = 'SELECT nombre FROM usuarios WHERE id = pedidos.usuario_id';
         $this->M_Pedido->total = 'SELECT SUM(cantidad * precio) FROM pedidos_detalle WHERE pedido_id = pedidos.id';  
         $result = $this->M_Pedido->find($params);
-        echo $f3->get('DB')->log();
+       // echo $f3->get('DB')->log();
         $items = array();
         foreach($result as $pedido) {
             $items[] = $pedido->cast();
@@ -198,5 +198,19 @@ class Pedidos_Ctrl
           ]
       ]);
   }
+
+  public function report($f3)
+    {
+        $f3->get('DB')->begin();
+        $resultado = $f3->get('DB')->exec("SELECT * FROM `pedidos` as pe INNER JOIN clientes as cli ON pe.cliente_id=cliente_id WHERE 
+        pe.fecha BETWEEN "."'".$f3->get('POST.fecha_ini')."'"." AND "."'".$f3->get('POST.fecha_fin')."'"." order by pe.fecha DESC");
+        
+        $f3->get('DB')->commit();
+        foreach ($resultado  as $row)
+        {             
+            $report[] = $row;   
+        }
+        echo json_encode($report);
+    }
   
 }
