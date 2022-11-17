@@ -128,7 +128,7 @@ class Pedidos_Ctrl
         $this->M_Pedido->vendedor = 'SELECT nombre FROM usuarios WHERE id = pedidos.usuario_id';
         $this->M_Pedido->total = 'SELECT SUM(cantidad * precio) FROM pedidos_detalle WHERE pedido_id = pedidos.id';  
         $result = $this->M_Pedido->find($params);
-        //echo $f3->get('DB')->log();
+        echo $f3->get('DB')->log();
         $items = array();
         foreach($result as $pedido) {
             $items[] = $pedido->cast();
@@ -175,6 +175,28 @@ class Pedidos_Ctrl
             ]
         ]);
         
+  }
+
+  public function listado_por_cliente($f3)
+  {
+      $cliente_id = $f3->get('PARAMS.cliente_id');
+      //$result = $this->M_Pedido->load(['cliente_id= ?', $cliente_id]);
+      $this->M_Pedido->cliente = 'SELECT nombre FROM clientes WHERE id = pedidos.cliente_id';
+      $this->M_Pedido->n_productos = 'SELECT COUNT(id) FROM pedidos_detalle WHERE pedido_id = pedidos.id';
+      $this->M_Pedido->vendedor = 'SELECT nombre FROM usuarios WHERE id = pedidos.usuario_id';
+      $result = $this->M_Pedido->find(['cliente_id= ?', $cliente_id], ['order'=>'fecha desc']);
+      //echo $f3->get('DB')->log();
+      $items = array();
+      foreach($result as $pedido) {
+          $items[] = $pedido->cast();
+      }
+      echo json_encode([
+          'mensaje' => count($items) > 0 ? '' : 'Aún no hay registros para mostrar.',
+          'info' => [
+              'items' => $items,
+              'total' => count($items)
+          ]
+      ]);
   }
   
 }
