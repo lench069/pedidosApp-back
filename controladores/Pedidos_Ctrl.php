@@ -24,6 +24,7 @@ class Pedidos_Ctrl
         $this->M_Pedido->set('subtotal', $f3->get('POST.subtotal'));
         $this->M_Pedido->set('iva', $f3->get('POST.iva'));
         $this->M_Pedido->set('total', $f3->get('POST.total'));
+        $this->M_Pedido->set('mesa', $f3->get('POST.mesa'));
         $this->M_Pedido->save();
         echo json_encode([
             'mensaje' => 'Pedido creado',
@@ -121,7 +122,7 @@ class Pedidos_Ctrl
     {
         $params = [];
         if(!empty($f3->get('POST.texto'))) {
-            $params = ['id = ?', $f3->get('POST.texto')];
+            $params = ['id = ? order by id desc', $f3->get('POST.texto')];
         }
         $this->M_Pedido->cliente = 'SELECT nombre FROM clientes WHERE id = pedidos.cliente_id';
         $this->M_Pedido->n_productos = 'SELECT COUNT(id) FROM pedidos_detalle WHERE pedido_id = pedidos.id';
@@ -202,7 +203,7 @@ class Pedidos_Ctrl
   public function report($f3)
     {
         $f3->get('DB')->begin();
-        $resultado = $f3->get('DB')->exec("SELECT * FROM `pedidos` as pe INNER JOIN clientes as cli ON pe.cliente_id=cliente_id WHERE 
+        $resultado = $f3->get('DB')->exec("SELECT * FROM `pedidos` as pe INNER JOIN clientes as cli ON pe.cliente_id=cli.id WHERE 
         pe.fecha BETWEEN "."'".$f3->get('POST.fecha_ini')."'"." AND "."'".$f3->get('POST.fecha_fin')."'"." order by pe.fecha DESC");
         
         $f3->get('DB')->commit();

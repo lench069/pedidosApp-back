@@ -3,6 +3,8 @@
 class Productos_Ctrl
 {
     public $M_Producto = null;
+    public $server = 'http://192.168.100.94/pedidosApp-back/';
+    //public $server = 'http://riobytes.com/pedidosApp-back/';
 
     public function __construct()
     {
@@ -74,7 +76,7 @@ class Productos_Ctrl
         foreach ($result as $producto) {
             $msg = "Productos cargados.";
             $item = $producto->cast();
-            $item['imagen'] = !empty($item['imagen']) ? 'http://192.168.100.94/pedidosApp-back/' . $item['imagen'] : 'http://via.placeholder.com/300x300';
+            $item['imagen'] = !empty($item['imagen']) ? $this->server. $item['imagen'] : 'http://via.placeholder.com/300x300';
             $items[] = $item;
         } 
         echo json_encode([
@@ -92,7 +94,7 @@ class Productos_Ctrl
         $items = array();
         foreach ($result as $producto) {
             $item = $producto->cast();
-            $item['imagen'] = !empty($item['imagen']) ? 'http://192.168.100.94/pedidosApp-back/' . $item['imagen'] : 'http://via.placeholder.com/300x300';
+            $item['imagen'] = !empty($item['imagen']) ? $this->server . $item['imagen'] : 'http://via.placeholder.com/300x300';
             $items[] = $item;
         }
         echo json_encode([
