@@ -104,7 +104,7 @@ class Usuarios_Ctrl
                 $info['id'] = 0;
             } else {
                 $this->M_Usuario->set('usuario', $f3->get('POST.usuario'));
-                if(md5($f3->get('POST.clave')) != $this->M_Usuario->get('clave') && $f3->get('POST.clave') != '') {
+                if(/*md5*/($f3->get('POST.clave')) != $this->M_Usuario->get('clave') && $f3->get('POST.clave') != '') {
                     $this->M_Usuario->set('clave', md5($f3->get('POST.clave')));
                 }
                 $this->M_Usuario->set('nombre', $f3->get('POST.nombre'));

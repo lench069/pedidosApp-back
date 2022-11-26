@@ -122,14 +122,14 @@ class Pedidos_Ctrl
     {
         $params = [];
         if(!empty($f3->get('POST.texto'))) {
-            $params = ['id = ? order by id desc', $f3->get('POST.texto')];
+            $params = ['id = ?', $f3->get('POST.texto')];
         }
         $this->M_Pedido->cliente = 'SELECT nombre FROM clientes WHERE id = pedidos.cliente_id';
         $this->M_Pedido->n_productos = 'SELECT COUNT(id) FROM pedidos_detalle WHERE pedido_id = pedidos.id';
         $this->M_Pedido->vendedor = 'SELECT nombre FROM usuarios WHERE id = pedidos.usuario_id';
         $this->M_Pedido->total = 'SELECT SUM(cantidad * precio) FROM pedidos_detalle WHERE pedido_id = pedidos.id';  
-        $result = $this->M_Pedido->find($params);
-       // echo $f3->get('DB')->log();
+        $result = $this->M_Pedido->find($params,['order'=>'id desc']);
+        //echo $f3->get('DB')->log();
         $items = array();
         foreach($result as $pedido) {
             $items[] = $pedido->cast();
